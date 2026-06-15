@@ -16,6 +16,10 @@ from ecombot.src.routing import (
     FAST_MODEL,
     DEEP_MODEL,
 )
+from google.adk.tools.mcp_tool import (
+    McpToolset,
+    StreamableHTTPConnectionParams,
+)
 
 load_dotenv()
 
@@ -27,6 +31,20 @@ _INSTRUCTION = (Path(__file__).parent / "support_instruction_v3.txt").read_text(
 APP_NAME = "ecombot"
 USER_ID = "user-1"
 SESSION_ID = "session-1"
+
+orders_toolset = McpToolset(
+    connection_params=StreamableHTTPConnectionParams(
+        url="http://127.0.0.1:8001/mcp",
+        timeout=10,
+    ),
+)
+
+inventory_toolset = McpToolset(
+    connection_params=StreamableHTTPConnectionParams(
+        url="http://127.0.0.1:8002/mcp",
+        timeout=10,
+    ),
+)
 
 
 def build_instruction(ctx: ReadonlyContext):
@@ -61,8 +79,9 @@ faq_agent = LlmAgent(
     model=LiteLlm(model=FAST_MODEL),
     instruction=build_instruction,
     tools=[
-        get_order_status,
         save_customer_name,
+        orders_toolset,
+        inventory_toolset,
     ]
 )
 
