@@ -11,6 +11,11 @@ from google.genai import types
 from ecombot.src.tools.order_tools import get_order_status, save_customer_name
 from ecombot.src.rag.retriever import retrieve
 from google.adk.agents.readonly_context import ReadonlyContext
+from ecombot.src.routing import (
+    classify_query,
+    FAST_MODEL,
+    DEEP_MODEL,
+)
 
 load_dotenv()
 
@@ -51,9 +56,9 @@ If no relevant information exists, say:
 "I couldn't find that information in my current knowledge base."
 """
 
-root_agent = LlmAgent(
-    name="support_agent",
-    model=LiteLlm(model=_MODEL),
+faq_agent = LlmAgent(
+    name="ecombot_fast",
+    model=LiteLlm(model=FAST_MODEL),
     instruction=build_instruction,
     tools=[
         get_order_status,
@@ -61,6 +66,17 @@ root_agent = LlmAgent(
     ]
 )
 
+deep_agent = LlmAgent(
+    name="ecombot_deep",
+    model=LiteLlm(model=DEEP_MODEL),
+    instruction=build_instruction,
+    tools=[
+        get_order_status,
+        save_customer_name,
+    ]
+)
+
+root_agent = faq_agent
 
 async def main():
     session_service = InMemorySessionService()
