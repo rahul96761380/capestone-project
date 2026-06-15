@@ -1,0 +1,12 @@
+google-adk
+litellm
+python-dotenv
+psycopg2-binary
+asyncpg
+SQLAlchemy
+redis
+pytest
+adk-extra-services
+chromadb
+openai
+sentence-transformers

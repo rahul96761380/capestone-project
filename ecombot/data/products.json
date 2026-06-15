@@ -1,0 +1,16 @@
+[
+  {
+    "product_id": "PRD-101",
+    "name": "Wireless Headphones",
+    "price": 4999,
+    "warranty": "1 year manufacturer warranty",
+    "shipping": "Delivered within 5 business days"
+  },
+  {
+    "product_id": "PRD-102",
+    "name": "Smart Watch",
+    "price": 2999,
+    "warranty": "6 months manufacturer warranty",
+    "shipping": "Delivered within 3 business days"
+  }
+]
