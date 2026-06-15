@@ -252,3 +252,292 @@ Verification Checklist:
 [PASS] Graceful fallback implemented
 [PASS] Existing PostgreSQL tools still work
 [PASS] Existing session state behavior preserved
+
+
+# Day 06 – Test Results
+
+## Project
+
+eComBot v3 – Knowledge Base with ChromaDB
+
+---
+
+## Environment
+
+* ChromaDB: Configured and operational
+* Embedding Model: openrouter/openai/text-embedding-3-small
+* Knowledge Sources:
+
+  * products.json
+  * faq.json
+  * ecom_faq.pdf
+* Retrieval Method: Semantic Search
+* Grounding Method: Retrieved Context Injection
+* Hallucination Guard: Enabled
+
+---
+
+## Test Case 1 – Direct Match
+
+### Query
+
+What is the return policy?
+
+### Retrieved Source
+
+ecom_faq.pdf
+
+### Response
+
+Products can be returned within 7 days of delivery. Items must be unused, undamaged, and returned in their original packaging. Refunds are not available for products damaged due to misuse. Customers are responsible for return shipping costs unless the item was defective or incorrectly shipped.
+
+### Expected Result
+
+Answer retrieved from PDF knowledge base.
+
+### Actual Result
+
+Answer retrieved successfully.
+
+### Status
+
+PASS
+
+---
+
+## Test Case 2 – Product Knowledge
+
+### Query
+
+What warranty comes with Wireless Headphones?
+
+### Retrieved Source
+
+products.json / ecom_faq.pdf
+
+### Expected Result
+
+1-year manufacturer warranty.
+
+### Actual Result
+
+Warranty information returned from knowledge base.
+
+### Status
+
+PASS
+
+---
+
+## Test Case 3 – Shipping Information
+
+### Query
+
+How long does standard shipping take?
+
+### Retrieved Source
+
+ecom_faq.pdf
+
+### Expected Result
+
+3–5 business days.
+
+### Actual Result
+
+Correct shipping information returned.
+
+### Status
+
+PASS
+
+---
+
+## Test Case 4 – Agent Capability Query
+
+### Query
+
+What else can you do?
+
+### Expected Result
+
+Agent explains supported capabilities.
+
+### Actual Result
+
+Agent correctly described:
+
+* Order tracking
+* Shipping support
+* Warranty information
+* Product support
+
+### Status
+
+PASS
+
+---
+
+## Test Case 5 – PDF Retrieval Validation
+
+### Query
+
+What is the return policy?
+
+### Expected Result
+
+Response grounded in PDF content.
+
+### Actual Result
+
+Response matched indexed PDF text.
+
+### Status
+
+PASS
+
+---
+
+## Test Case 6 – Metadata Storage Validation
+
+### Validation
+
+Metadata stored with PDF chunks:
+
+{
+"source_file": "ecom_faq.pdf",
+"document_title": "E-Commerce Support FAQ",
+"section": "Page 1",
+"page": 1,
+"doc_type": "pdf"
+}
+
+### Expected Result
+
+Metadata attached to indexed chunks.
+
+### Actual Result
+
+Metadata stored successfully.
+
+### Status
+
+PASS
+
+---
+
+## Test Case 7 – ChromaDB Index Validation
+
+### Validation
+
+Collection: ecombot_kb
+
+### Expected Result
+
+Knowledge documents indexed successfully.
+
+### Actual Result
+
+Collection built and searchable.
+
+### Status
+
+PASS
+
+---
+
+## Test Case 8 – Grounding Validation
+
+### Validation
+
+Responses generated using retrieved context only.
+
+### Expected Result
+
+No fabricated facts.
+
+### Actual Result
+
+Grounded responses observed.
+
+### Status
+
+PASS
+
+---
+
+## Test Case 9 – Hallucination Prevention
+
+### Query
+
+Do I need a visa for Dubai?
+
+### Expected Result
+
+Fallback response.
+
+### Actual Result
+
+Agent did not provide unsupported travel information.
+
+### Status
+
+PASS
+
+---
+
+## Test Case 10 – Out-of-Scope Question
+
+### Query
+
+What is the weather tomorrow?
+
+### Expected Result
+
+Fallback response.
+
+### Actual Result
+
+Agent did not invent an answer.
+
+### Status
+
+PASS
+
+---
+
+# Day 06 Completion Checklist
+
+[PASS] PDF content extracted successfully
+
+[PASS] PDF content indexed into ChromaDB
+
+[PASS] Metadata stored for indexed chunks
+
+[PASS] Retrieval returns relevant content
+
+[PASS] Agent uses retrieved context
+
+[PASS] Hallucination guard implemented
+
+[PASS] Unsupported questions handled safely
+
+[PASS] Existing tool functionality preserved
+
+[PASS] Existing session state behavior preserved
+
+[PASS] Knowledge base milestone completed
+
+---
+
+# Final Result
+
+Total Tests Executed: 10
+
+Passed: 10
+
+Failed: 0
+
+Overall Status: PASS
+
+Day 06 eComBot v3 Knowledge Base implementation completed successfully.
