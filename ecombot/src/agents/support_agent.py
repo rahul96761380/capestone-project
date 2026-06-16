@@ -74,16 +74,18 @@ If no relevant information exists, say:
 "I couldn't find that information in my current knowledge base."
 """
 
-faq_agent = LlmAgent(
-    name="ecombot_fast",
+support_agent = LlmAgent(
+    name="support_agent",
     model=LiteLlm(model=FAST_MODEL),
     instruction=build_instruction,
     tools=[
         save_customer_name,
         orders_toolset,
         inventory_toolset,
-    ]
+    ],
 )
+
+root_agent = support_agent
 
 deep_agent = LlmAgent(
     name="ecombot_deep",
@@ -95,8 +97,7 @@ deep_agent = LlmAgent(
     ]
 )
 
-root_agent = faq_agent
-
+"""
 async def main():
     session_service = InMemorySessionService()
 
@@ -130,3 +131,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+    """

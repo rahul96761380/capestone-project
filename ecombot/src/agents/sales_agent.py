@@ -7,24 +7,55 @@ from google.adk.models.lite_llm import LiteLlm
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
+from google.adk.agents.readonly_context import ReadonlyContext
+
+from ecombot.src.rag.retriever import retrieve
 
 load_dotenv()
 
 _MODEL = "openrouter/google/gemini-2.5-flash"
-_INSTRUCTION = (Path(__file__).parent / "support_instruction_v1.txt").read_text().strip()
 
-APP_NAME = "ecombot"
-USER_ID = "user-1"
-SESSION_ID = "session-1"
+_INSTRUCTION = (Path(__file__).parent / "sales_instruction.txt" ).read_text().strip()
 
 
-root_agent = LlmAgent(
-    name="support_agent",
+def build_instruction(ctx: ReadonlyContext):
+
+    query = ""
+
+    if ctx.user_content and ctx.user_content.parts:
+        query = "".join(
+            part.text or ""
+            for part in ctx.user_content.parts
+            if part.text
+        )
+
+    chunks = retrieve(query)
+
+    context = "\n".join(chunks) if chunks else "NO RELEVANT INFORMATION FOUND"
+
+    return f"""
+{_INSTRUCTION}
+
+Retrieved Context:
+{context}
+
+Answer only using the retrieved context.
+
+If no relevant information exists, say:
+"I couldn't find that information in my current knowledge base."
+"""
+
+
+sales_agent = LlmAgent(
+    name="sales_agent",
     model=LiteLlm(model=_MODEL),
-    instruction=_INSTRUCTION,
+    instruction=build_instruction,
 )
 
+root_agent = sales_agent
 
+
+"""
 async def main():
     session_service = InMemorySessionService()
 
@@ -58,3 +89,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+"""
