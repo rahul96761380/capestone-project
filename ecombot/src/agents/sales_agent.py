@@ -54,7 +54,7 @@ sales_agent = LlmAgent(
 
 root_agent = sales_agent
 
-
+"""
 async def main():
     session_service = InMemorySessionService()
 
@@ -88,3 +88,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+"""
