@@ -6,7 +6,15 @@ asyncpg
 SQLAlchemy
 redis
 pytest
+pypdf
+pyttsx3
+boto3
 adk-extra-services
 chromadb
 openai
+google-adk[mcp]
 sentence-transformers
+httpx
+sounddevice
+webrtcvad-wheels
+numpy
