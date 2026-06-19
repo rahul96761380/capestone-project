@@ -6,7 +6,7 @@ import sounddevice as sd
 
 from google.genai import types
 
-from ecombot.agent import orchestrator_agent
+from ecombot.src.agents.orchestrator import orchestrator_agent
 
 from ecombot.src.voice.stt import OpenRouterSTT
 from ecombot.src.voice.tts import OpenRouterTTS
